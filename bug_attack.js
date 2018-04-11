@@ -24,7 +24,7 @@ window.addEventListener("load", loadAssets);
  * @return null
  */
 function loadAssets() {
-    document.fonts.load("50px 'Creepster', cursive", "'Press Start 2P', cursive").then(menu.init);
+    document.fonts.load("50px 'Creepster', cursive", "'Press Start 2P', cursive").then(menu.init.bind(menu));
 }
 
 /**
@@ -108,17 +108,6 @@ class Environment {
     }
 
     /**
-     * Draw the background
-     * @return null
-     */
-    drawBackground() {
-        var background = new Image();
-        background.src = directory + "images/" + this.background;
-        this.canvas.style.backgroundSize = "cover";
-        this.canvas.style.backgroundImage = "url(" + directory + "images/" + this.background + ")";
-    }
-
-    /**
      * Draw the audio icon
      * @return null
      */
@@ -131,52 +120,6 @@ class Environment {
             icon.src = directory + "images/volume-on.png";
         }
         GAME.context.drawImage(icon, 10, GAME.canvas.height - 50);
-    }
-
-    /**
-     * Initialize the game
-     * @return null
-     */
-    init() {
-        this.initCanvas();
-        menu.init();
-    }
-
-    /**
-     * Initialize the canvas
-     * @return null
-     */
-    initCanvas() {
-        this.canvas = document.getElementById("canvas");
-        this.context = this.canvas.getContext("2d");
-        this.canvas.width = 900;
-        this.canvas.height = 600;
-    }
-
-    /**
-     * Keydown controls
-     */
-    controlsKeydown(event) {
-        if (event.keyCode === 13) {
-            //do something
-        }
-    }
-
-    /**
-     * Keyup controls
-     */
-    controlsKeyup(event) {
-        if (event.keyCode === 13) {
-            //do something
-        }
-    }
-
-    /**
-     * Clear the canvas
-     * @return null
-     */
-    clearCanvas() {
-        GAME.context.clearRect(0, 0, GAME.canvas.width, GAME.canvas.height);
     }
 }
 
@@ -264,6 +207,14 @@ class Game extends Environment {
     }
 
     /**
+     * Clear the canvas
+     * @return null
+     */
+    clearCanvas() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    /**
      * Increment the score
      * @param  {integer} points Points to increment
      * @return null
@@ -278,20 +229,9 @@ class Game extends Environment {
      */
     drawBackground() {
         var background = new Image();
-        background.src = directory + "images/" + GAME.background;
-        GAME.canvas.style.backgroundSize = "cover";
-        GAME.canvas.style.backgroundImage = "url(" + directory + "images/" + GAME.background + ")";
-    }
-
-    /**
-     * Initialize the game
-     * @return null
-     */
-    init() {
-        GAME.initCanvas();
-        menu.drawStartScreen();
-        window.addEventListener("keydown", GAME.controlsKeydownStart);
-        GAME.keydownListener = GAME.controlsKeydownStart;
+        background.src = directory + "images/" + this.background;
+        this.canvas.style.backgroundSize = "cover";
+        this.canvas.style.backgroundImage = "url(" + directory + "images/" + this.background + ")";
     }
 
     /**
@@ -299,10 +239,10 @@ class Game extends Environment {
      * @return null
      */
     initCanvas() {
-        GAME.canvas = document.getElementById("canvas");
-        GAME.context = GAME.canvas.getContext("2d");
-        GAME.canvas.width = 900;
-        GAME.canvas.height = 600;
+        this.canvas = document.getElementById("canvas");
+        this.context = this.canvas.getContext("2d");
+        this.canvas.width = 900;
+        this.canvas.height = 600;
     }
 
     /**
@@ -311,7 +251,7 @@ class Game extends Environment {
      * @return null
      */
     initLevel() {
-        switch (GAME.level) {
+        switch (this.level) {
             case 1:
                 level1();
                 break;
@@ -354,45 +294,45 @@ class Game extends Environment {
      * @return null
      */
     main() {
-        if(GAME.isActive) {
-            GAME.setEnemyMovement();
-            GAME.moveEnemies();
-            GAME.moveUser();
-            GAME.moveAttacks();
-            GAME.moveEnemyAttacks();
-            GAME.movePowerUps();
-            GAME.createEnemyAttacks();
-            GAME.createUserAttacks();
-            GAME.checkHit();
-            GAME.checkDamage();
-            GAME.checkPowerUps();
-            GAME.animateEnemies();
+        if(this.isActive) {
+            this.setEnemyMovement();
+            this.moveEnemies();
+            this.moveUser();
+            this.moveAttacks();
+            this.moveEnemyAttacks();
+            this.movePowerUps();
+            this.createEnemyAttacks();
+            this.createUserAttacks();
+            this.checkHit();
+            this.checkDamage();
+            this.checkPowerUps();
+            this.animateEnemies();
         }
-        GAME.clearCanvas();
-        if(GAME.isBoss) {
-            if (GAME.enemies.length) {
-                GAME.enemies[0].drawHealthContainer();
-                GAME.enemies[0].drawHealth();
+        this.clearCanvas();
+        if(this.isBoss) {
+            if (this.enemies.length) {
+                this.enemies[0].drawHealthContainer();
+                this.enemies[0].drawHealth();
             }
         }
-        GAME.drawEnemies();
+        this.drawEnemies();
         user.draw();
-        GAME.drawPowerUps();
-        GAME.drawAttacks();
-        GAME.drawEnemyAttacks();
-        GAME.drawScore();
-        GAME.drawLevel();
-        GAME.drawLives();
-        GAME.drawClears();
-        GAME.drawBombs();
+        this.drawPowerUps();
+        this.drawAttacks();
+        this.drawEnemyAttacks();
+        this.drawScore();
+        this.drawLevel();
+        this.drawLives();
+        this.drawClears();
+        this.drawBombs();
         environment.drawAudio();
-        if(!GAME.isActive) {
-            GAME.drawPaused();
+        if(!this.isActive) {
+            this.drawPaused();
         }
-        GAME.checkWin();
-        GAME.checkLoss();
-        if(GAME.isActive) {
-            setTimeout(GAME.main, GAME.speed);
+        this.checkWin();
+        this.checkLoss();
+        if(this.isActive) {
+            setTimeout(this.main.bind(this), this.speed);
         }
     }
 
@@ -596,13 +536,13 @@ class Game extends Environment {
      */
     checkLoss() {
         if(this.lives <= 0) {
-            GAME.clearCanvas();
-            GAME.drawLoss();
-            GAME.resetGame();
-            window.removeEventListener("keydown", GAME.keydownListener);
-            window.removeEventListener("keyup", GAME.keyupListener);
+            this.clearCanvas();
+            this.drawLoss();
+            this.resetGame();
+            window.removeEventListener("keydown", this.keydownListener);
+            window.removeEventListener("keyup", this.keyupListener);
             window.addEventListener("keydown", menu.controlsKeydownStart);
-            GAME.keydownListener = menu.controlsKeydownStart;
+            this.keydownListener = menu.controlsKeydownStart;
         }
     }
 
@@ -611,7 +551,7 @@ class Game extends Environment {
      * @return null
      */
     resetGame() {
-        user = new Person(GAME.canvas.width / 2, GAME.canvas.height - 100);
+        user = new Person(this.canvas.width / 2, this.canvas.height - 100);
         this.isActive = false;
         this.isBoss = false;
         this.level = 1;
@@ -958,23 +898,23 @@ class Menu extends Environment {
      */
     init() {
         GAME.initCanvas();
-        window.addEventListener("keydown", menu.controlsKeydownStart);
-        GAME.keydownListener = menu.controlsKeydownStart;
+        window.addEventListener("keydown", this.controlsKeydownStart);
+        GAME.keydownListener = this.controlsKeydownStart;
         window.addEventListener("keydown", function(event){
             if(event.keyCode === 32) {
                 event.preventDefault();
             }
         });
         GAME.drawBackground();
-        menu.units.push(new Bee(canvas.width / 2, canvas.height / 2, {attackRate: 0, ySpeed: 1}).randomizeMovement());
-        menu.main();
-        menu.audio.loop = true;
-        menu.audio.play();
+        this.units.push(new Bee(canvas.width / 2, canvas.height / 2, {attackRate: 0, ySpeed: 1}).randomizeMovement());
+        this.main();
+        this.audio.loop = true;
+        this.audio.play();
     }
 
     controlsKeydownStart(event) {
         if (event.keyCode === 13) {
-            menu.clearCanvas();
+            GAME.clearCanvas();
             menu.isActive = false;
             GAME.isActive = true;
             window.removeEventListener("keydown", GAME.keydownListener);
@@ -1037,12 +977,12 @@ class Menu extends Environment {
     }
 
     main() {
-        menu.clearCanvas();
-        menu.drawUnits();
-        menu.currentScreen();
+        GAME.clearCanvas();
+        this.drawUnits();
+        this.currentScreen();
         environment.drawAudio();
-        if (menu.isActive) {
-            setTimeout(menu.main, GAME.speed);
+        if (this.isActive) {
+            setTimeout(this.main.bind(this), GAME.speed);
         }
     }
 
