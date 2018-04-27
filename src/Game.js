@@ -447,8 +447,7 @@ export default class Game extends Environment {
         this.level++;
         window.removeEventListener("keydown", this.keydownListener);
         window.removeEventListener("keyup", this.keyupListener);
-        var menu = new Menu(this);
-        this.keydownListener = menu.controlsKeydownStart.bind(menu);
+        this.keydownListener = this.menu.controlsKeydownStart.bind(this.menu);
         window.addEventListener("keydown", this.keydownListener);
     }
 
@@ -472,9 +471,7 @@ export default class Game extends Environment {
         this.resetGame();
         window.removeEventListener("keydown", this.keydownListener);
         window.removeEventListener("keyup", this.keyupListener);
-        var menu = new Menu(this);
-        menu.units.push(new Bee(this, this.canvas.width / 2, this.canvas.height / 2, {attackRate: 0, ySpeed: 1}).randomizeMovement());
-        this.keydownListener = menu.controlsKeydownStart.bind(menu);
+        this.keydownListener = this.menu.controlsKeydownStart.bind(this.menu);
         window.addEventListener("keydown", this.keydownListener);
     }
 
