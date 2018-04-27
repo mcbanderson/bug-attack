@@ -17,6 +17,8 @@ Then build using:
 Finally, include the following in an HTML page:
 
 ```
+<canvas id="canvas"></canvas>
+
 <script src="dist/bug_attack.js"></script>
 <script>
     var bug_atack = new BugAttack("canvas");
