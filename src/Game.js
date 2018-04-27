@@ -18,8 +18,10 @@ import level9 from './levels/level9.js';
 import level10 from './levels/level10.js';
 import level11 from './levels/level11.js';
 
+var WebFont = require('webfontloader');
+
 export default class Game extends Environment {
-    constructor(options = {}) {
+    constructor(canvasID, options = {}) {
         super();
 
         /**
@@ -105,6 +107,25 @@ export default class Game extends Environment {
          * @type {Person}
          */
         this.user = null;
+
+        /**
+         * Set the canvas
+         * @type {[type]}
+         */
+        this.canvas = document.getElementById(canvasID);
+
+        this.menu = new Menu(this);
+
+        window.addEventListener("load", this.loadAssets.bind(this));
+    }
+
+    loadAssets() {
+        WebFont.load({
+            google: {
+                families: ['Creepster', 'Press Start 2P']
+            },
+            active: this.menu.init.bind(this.menu)
+        });
     }
 
     /**
@@ -132,7 +153,6 @@ export default class Game extends Environment {
      * @return null
      */
     initCanvas() {
-        this.canvas = document.getElementById("canvas");
         this.context = this.canvas.getContext("2d");
         this.canvas.width = 900;
         this.canvas.height = 600;
