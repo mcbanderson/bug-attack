@@ -6,6 +6,7 @@
 import Environment from './Environment.js';
 import Menu from './Menu.js';
 import Game from './Game.js';
+var WebFont = require('webfontloader');
 
 /**
  * Event Listeners
@@ -17,7 +18,12 @@ window.addEventListener("load", loadAssets);
  * @return null
  */
 function loadAssets() {
-    document.fonts.load("50px 'Creepster', cursive", "'Press Start 2P', cursive").then(menu.init.bind(menu));
+    WebFont.load({
+        google: {
+            families: ['Creepster', 'Press Start 2P']
+        },
+        active: menu.init.bind(menu)
+    });
 }
 
 /**
@@ -25,17 +31,9 @@ function loadAssets() {
  */
 
 /**
- * The user
- * @type {Person}
- */
-var user;
-
-var environment = new Environment();
-
-/**
  * The main game object
  * @type {Object}
  */
-var GAME = new Game(environment);
+var GAME = new Game();
 
 var menu = new Menu(GAME);
