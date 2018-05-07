@@ -10,6 +10,8 @@ gulp.task('copy', function () {
         .pipe(gulp.dest('./dist/audio'));
     gulp.src('./src/images/*')
         .pipe(gulp.dest('./dist/images'));
+    gulp.src('./index.html')
+        .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('browserify', function () {
